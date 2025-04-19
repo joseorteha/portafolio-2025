@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { useTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Tabs from "@mui/material/Tabs";
@@ -12,8 +12,11 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Certificate from "../components/Certificate";
 import { Code, Award, Boxes, Sparkles, X } from "lucide-react";
-import { certificatesData } from "../../src/data/certificatesData"; // Importa datos estáticos
-import { projectsData } from "../../src/data/projectsData"; // Importa datos estáticos
+import { certificatesData } from "../data/certificatesData";
+import { projectsData } from "../data/projectsData";
+
+// Importar los estilos de Swiper
+import "swiper/css";
 
 // Componente separado para el botón Ver Más/Ver Menos
 const ToggleButton = ({ onClick, isShowingMore }) => (
@@ -72,16 +75,14 @@ function TabPanel({ children, value, index, ...other }) {
   return (
     <div
       role="tabpanel"
-      hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
+      style={{ display: value === index ? "block" : "none" }}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: { xs: 1, sm: 3 } }}>
-          <div>{children}</div>
-        </Box>
-      )}
+      <Box sx={{ p: { xs: 1, sm: 3 } }}>
+        <div>{children}</div>
+      </Box>
     </div>
   );
 }
@@ -125,9 +126,10 @@ export default function FullWidthTabs() {
   const [certificates, setCertificates] = useState([]);
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showAllCertificates, setShowAllCertificates] = useState(false);
-  const [showMessage, setShowMessage] = useState(false); // Estado para el mensaje interactivo
+  const [showMessage, setShowMessage] = useState(false);
   const isMobile = window.innerWidth < 768;
   const initialItems = isMobile ? 4 : 6;
+  const swiperRef = useRef(null);
 
   useEffect(() => {
     AOS.init({
@@ -153,23 +155,24 @@ export default function FullWidthTabs() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(newValue);
+    }
   };
 
   const toggleShowMore = useCallback((type) => {
-    if (type === 'projects') {
-      setShowAllProjects(prev => !prev);
+    if (type === "projects") {
+      setShowAllProjects((prev) => !prev);
     } else {
-      setShowAllCertificates(prev => !prev);
+      setShowAllCertificates((prev) => !prev);
     }
   }, []);
 
-  // Función para manejar el clic en el botón Demo
   const handleDemoClick = (link, e) => {
     if (link === "private" || link.includes("github.com")) {
       e.preventDefault();
       setShowMessage(true);
     }
-    // Si no es "private" ni un enlace de GitHub, el enlace se abrirá normalmente gracias al href
   };
 
   const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
@@ -179,18 +182,20 @@ export default function FullWidthTabs() {
     <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Portofolio">
       <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
         <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
-          <span style={{
-            color: '#6366f1',
-            backgroundImage: 'linear-gradient(45deg, #6366f1 10%, #a855f7 93%)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
+          <span
+            style={{
+              color: "#6366f1",
+              backgroundImage: "linear-gradient(45deg, #6366f1 10%, #a855f7 93%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
             Exhibición de Portafolio
           </span>
         </h2>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          Explora mi trayectoria a través de proyectos, certificaciones y experiencia técnica. 
+          Explora mi trayectoria a través de proyectos, certificaciones y experiencia técnica.
           Cada sección representa un hito en mi camino de aprendizaje continuo.
         </p>
       </div>
@@ -280,92 +285,106 @@ export default function FullWidthTabs() {
           </Tabs>
         </AppBar>
 
-        <SwipeableViews
-          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-          index={value}
-          onChangeIndex={setValue}
+        <Swiper
+          slidesPerView={1}
+          spaceBetween={0}
+          direction="horizontal"
+          initialSlide={value}
+          onSlideChange={(swiper) => setValue(swiper.activeIndex)}
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+            swiper.slideTo(value);
+          }}
+          style={{ width: "100%" }}
+          rtl={theme.direction === "rtl"}
         >
-          <TabPanel value={value} index={0} dir={theme.direction}>
-            <div className="container mx-auto flex justify-center items-center overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
-                {displayedProjects.map((project, index) => (
-                  <div
-                    key={project.id || index}
-                    data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
-                    data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
-                  >
-                    <CardProject
-                      Img={project.Img}
-                      Title={project.Title}
-                      Description={project.Description}
-                      Link={project.Link}
-                      id={project.id}
-                      onDemoClick={handleDemoClick} // Pasamos la función como prop
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-            {projects.length > initialItems && (
-              <div className="mt-6 w-full flex justify-start">
-                <ToggleButton
-                  onClick={() => toggleShowMore('projects')}
-                  isShowingMore={showAllProjects}
-                />
-              </div>
-            )}
-          </TabPanel>
-
-          <TabPanel value={value} index={1} dir={theme.direction}>
-            <div className="container mx-auto flex justify-center items-center overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5 gap-4">
-                {displayedCertificates.length === 0 ? (
-                  <p className="text-gray-400">No hay certificados disponibles.</p>
-                ) : (
-                  displayedCertificates.map((certificate, index) => (
+          <SwiperSlide>
+            <TabPanel value={value} index={0}>
+              <div className="container mx-auto flex justify-center items-center overflow-hidden">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
+                  {displayedProjects.map((project, index) => (
                     <div
-                      key={certificate.id || index}
+                      key={project.id || index}
                       data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
                       data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
                     >
-                      <Certificate
-                        ImgSertif={certificate.Img}
-                        Title={certificate.Title}
-                        Issuer={certificate.Issuer}
-                        Date={certificate.Date}
-                        Link={certificate.Link}
+                      <CardProject
+                        Img={project.Img}
+                        Title={project.Title}
+                        Description={project.Description}
+                        Link={project.Link}
+                        id={project.id}
+                        onDemoClick={handleDemoClick}
                       />
                     </div>
-                  ))
-                )}
+                  ))}
+                </div>
               </div>
-            </div>
-            {certificates.length > initialItems && (
-              <div className="mt-6 w-full flex justify-start">
-                <ToggleButton
-                  onClick={() => toggleShowMore('certificates')}
-                  isShowingMore={showAllCertificates}
-                />
-              </div>
-            )}
-          </TabPanel>
+              {projects.length > initialItems && (
+                <div className="mt-6 w-full flex justify-start">
+                  <ToggleButton
+                    onClick={() => toggleShowMore("projects")}
+                    isShowingMore={showAllProjects}
+                  />
+                </div>
+              )}
+            </TabPanel>
+          </SwiperSlide>
 
-          <TabPanel value={value} index={2} dir={theme.direction}>
-            <div className="container mx-auto flex justify-center items-center overflow-hidden pb-[5%]">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-8 gap-5">
-                {techStacks.map((stack, index) => (
-                  <div
-                    key={index}
-                    data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
-                    data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
-                  >
-                    <TechStackIcon TechStackIcon={stack.icon} Language={stack.language} />
-                  </div>
-                ))}
+          <SwiperSlide>
+            <TabPanel value={value} index={1}>
+              <div className="container mx-auto flex justify-center items-center overflow-hidden">
+                <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5 gap-4">
+                  {displayedCertificates.length === 0 ? (
+                    <p className="text-gray-400">No hay certificados disponibles.</p>
+                  ) : (
+                    displayedCertificates.map((certificate, index) => (
+                      <div
+                        key={certificate.id || index}
+                        data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
+                        data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
+                      >
+                        <Certificate
+                          ImgSertif={certificate.Img}
+                          Title={certificate.Title}
+                          Issuer={certificate.Issuer}
+                          Date={certificate.Date}
+                          Link={certificate.Link}
+                        />
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
-            </div>
-          </TabPanel>
-        </SwipeableViews>
+              {certificates.length > initialItems && (
+                <div className="mt-6 w-full flex justify-start">
+                  <ToggleButton
+                    onClick={() => toggleShowMore("certificates")}
+                    isShowingMore={showAllCertificates}
+                  />
+                </div>
+              )}
+            </TabPanel>
+          </SwiperSlide>
+
+          <SwiperSlide>
+            <TabPanel value={value} index={2}>
+              <div className="container mx-auto flex justify-center items-center overflow-hidden pb-[5%]">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-8 gap-5">
+                  {techStacks.map((stack, index) => (
+                    <div
+                      key={index}
+                      data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
+                      data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
+                    >
+                      <TechStackIcon TechStackIcon={stack.icon} Language={stack.language} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </TabPanel>
+          </SwiperSlide>
+        </Swiper>
       </Box>
 
       {/* Mensaje Interactivo si la Demo no está Disponible */}
