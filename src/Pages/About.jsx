@@ -219,7 +219,7 @@ const AboutPage = () => {
               data-aos="fade-right"
               data-aos-duration="1500"
             >
-              Soy estudiante de tercer año de Ingeniería de Sistemas en el Instituto Tecnológico Superior de Zongolica. Apasionado por el desarrollo web, tengo experiencia en crear aplicaciones web interactivas e innovadoras. Me especializo en tecnologías como HTML, CSS, JavaScript, Python y Java, y tengo experiencia en backend. Mi trabajo se centra en ofrecer soluciones eficientes e intuitivas, manteniéndome al día con las últimas tendencias tecnológicas.
+              Soy estudiante de tercer año de Ingeniería de Sistemas en el Instituto Tecnológico Superior de Zongolica. Apasionado por el desarrollo web, tengo experiencia en crear aplicaciones web interactivas e innovadoras. Me especializo en tecnologías como HTML, CSS, JavaScript, React, Python y Java, y tengo experiencia en backend. Mi trabajo se centra en ofrecer soluciones eficientes e intuitivas, manteniéndome al día con las últimas tendencias tecnológicas.
             </p>
 
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-4 lg:px-0 w-full">
