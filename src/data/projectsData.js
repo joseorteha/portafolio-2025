@@ -19,8 +19,8 @@ export const projectsData = [
       Title: "Guau & Miau",
       Description: "Una plataforma para facilitar la adopción de mascotas, con búsqueda de perros y gatos, perfiles detallados, y un formulario de adopción.",
       Img: "/assets/guau-miau.png",
-      Link: "private",
-      Github: "Private",
+      Link: "https://guau-miau.netlify.app/",
+      Github: "https://github.com/joseorteha/c24-22-m-webapp",
       TechStack: ["React", "Tailwind CSS", "Firebase"],
       Features: [
         "🐾 Búsqueda de mascotas por tipo (perros o gatos).",
