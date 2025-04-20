@@ -77,7 +77,7 @@ const SocialLink = memo(({ icon: Icon, link }) => (
 const TYPING_SPEED = 100;
 const ERASING_SPEED = 50;
 const PAUSE_DURATION = 2000;
-const WORDS = ["Estudiante de Ingeniería de Sistemas", "Desarrollador Web"];
+const WORDS = ["Ingeniero de software", "Desarrollador Web"];
 const TECH_STACK = ["React", "Javascript", "Node.js", "Tailwind", "Python", "Java", "HTML", "CSS"];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/joseorteha" },
