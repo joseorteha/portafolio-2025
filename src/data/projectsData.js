@@ -151,7 +151,8 @@ export const projectsData = [
         "🎨 Interfaz Amigable: Diseño atractivo y fácil de navegar.",
         "📱 Responsive: Compatible con dispositivos móviles y de escritorio."
       ]
-    }
+    },
+    
       {
       id: "11",
       Title: "Barberia Premin",
