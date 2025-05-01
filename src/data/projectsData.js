@@ -156,7 +156,7 @@ export const projectsData = [
       id: "11",
       Title: "Barberia Premin",
       Description: "Barbería Premium es una web profesional para una barbería moderna.",
-      Img: "/assets/",
+      Img: "/assets/barber.png",
       Link: "https://barberzon.netlify.app/",
       Github: "https://github.com/joseorteha/barberia-premium",
       TechStack: ["TypeScript", "JavaScript", "SCSS Modules", "Next.js", "React", "Framer Motion",
