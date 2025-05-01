@@ -153,19 +153,20 @@ export const projectsData = [
       ]
     },
     
-      {
-      id: "11",
-      Title: "Barberia Premin",
-      Description: "Barbería Premium es una web profesional para una barbería moderna.",
-      Img: "/assets/barber.png",
-      Link: "https://barberzon.netlify.app/",
-      Github: "https://github.com/joseorteha/barberia-premium",
-      TechStack: ["TypeScript", "JavaScript", "SCSS Modules", "Next.js", "React", "Framer Motion",
-      Features: [
-        "🎬 Registrarse, iniciar sesión y gestionar su perfil.",
-        "ℹ️ FAQ, Testimonios, Galería y más: Todo lo que una barbería premium necesita.",
-        "🎨 Interfaz Amigable: Diseño atractivo y fácil de navegar.",
-        "📱 Reservar citas fácilmente vía WhatsApp."
-      ]
-    }
+  {
+  id: "11",
+  Title: "Barberia Premin",
+  Description: "Barbería Premium es una web profesional para una barbería moderna.",
+  Img: "/assets/barber.png",
+  Link: "https://barberzon.netlify.app/",
+  Github: "https://github.com/joseorteha/barberia-premium",
+  TechStack: ["TypeScript", "JavaScript", "SCSS Modules", "Next.js", "React", "Framer Motion"],
+  Features: [
+    "🎬 Registrarse, iniciar sesión y gestionar su perfil.",
+    "ℹ️ FAQ, Testimonios, Galería y más: Todo lo que una barbería premium necesita.",
+    "🎨 Interfaz Amigable: Diseño atractivo y fácil de navegar.",
+    "📱 Reservar citas fácilmente vía WhatsApp."
+  ]
+}
+
   ];
